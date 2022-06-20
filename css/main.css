@@ -1,0 +1,94 @@
+.footer-text {
+  padding: 10px 0;
+  margin-bottom: 0;
+}
+.registration__heading {
+  font-size: 26px;
+  font-weight: 600;
+  color: black;
+  text-transform: uppercase;
+}
+.wrapper {
+  min-height: 100vh;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.wrapper.wrapper-todo {
+  align-items: flex-start;
+}
+.form-control.password {
+  position: relative;
+}
+.card-home {
+  margin: 0 auto;
+}
+#typed-title {
+  margin-bottom: 0;
+}
+.todo-list {
+  padding-top: 60px;
+}
+.todo-list_list {
+  list-style: none;
+  border: 1px solid gray;
+  padding-left: 0;
+}
+.todo-list_item {
+  border-bottom: 1px solid grey;
+  position: relative;
+  padding: 8px 95px 8px 25px;
+  background-color: #F8F8F8;
+}
+.todo-list_item:last-of-type {
+  border-bottom: 0;
+}
+.todo-list_title {
+  margin-bottom: 0;
+  font-size: 20px;
+  line-height: 1.4;
+  color: black;
+}
+.todo-list_link {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #DCDCDC;
+  transition: background-color .5s ease-in;
+}
+.todo-list_link:hover {
+  background-color: white;
+}
+.todo-list_link.edit {
+  width: 40px;
+  height: 100%;
+  right: 40px;
+  border-right: 1px solid gray;
+  border-left: 1px solid gray;
+  color: black;
+}
+.todo-list_link.delete {
+  width: 40px;
+  height: 100%;
+  right: 0;
+  color: red;
+}
+.todo-list_user {
+  text-align: center;
+  margin: 10px 0 30px;
+}
+.todo-input {
+  margin-bottom: 50px;
+}
+.todo-form {
+  position: relative;
+}
+.todo-create {
+  position: absolute;
+  top: 50%;
+  right: 0;
+}
