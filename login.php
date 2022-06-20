@@ -21,11 +21,8 @@ if(isset($_POST['login'])) {
     $_SESSION['loggedIn'] = true;
     header("Location: index.php");
   } else {
-    $_SESSION['loggedIn'] = false;
-    // header("Location: registration.php");
+    echo "nothing";
   }
-
-  var_dump($_SESSION['loggedIn']);
 }
 
 ?>

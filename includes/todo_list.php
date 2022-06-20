@@ -1,53 +1,60 @@
-<?php  
-$username = $_SESSION['username']; 
-$user_id = $_SESSION['user_id'];
-if(isset($_POST['create_todo'])) {
-  $todo_content = $_POST['todo-content'];
-  $todo_content = stripslashes($todo_content);
-  $todo_content = mysqli_real_escape_string($connection, $todo_content);
-
-  $query = "INSERT INTO todos(todo_content, todo_user_id) ";
-  $query .= "VALUES('{$todo_content}', $user_id) ";
-  $create_todo_query = mysqli_query($connection, $query);
+<?php
+include "functions.php";
+createTodoItem(); 
+updateTodo(); 
+if(isset($_SESSION['user_id'])) {
+  $query = "SELECT count(todo_user_id) as total FROM todos WHERE todo_user_id = {$_SESSION['user_id']} ";
+  $count_query = mysqli_query($connection, $query);
+  $data = mysqli_fetch_assoc($count_query);
+  $counter = $data['total'];
 }
-?>
+$query = "UPDATE users SET user_list_count = {$counter} ";
+$query .= "WHERE user_id = {$_SESSION['user_id']} ";
+$user_list_update = mysqli_query($connection, $query); ?>
 <section class="todo-list" id="todo">
   <div class="row  justify-content-center">
     <div class="col-12">
       <h1 class="todo-list_user">
-        <?php echo ucfirst($username) . "'s" . " Todo List"?>
+        <?php
+        if ($username) {
+          echo ucfirst($username) . "'s" . " Todo List";
+        } ?>
+      <p>Todo Item Count: <span class="badge bg-primary"><?php echo $counter; ?></span></p>
       </h1>
     </div>
     <div class="col-10">
-      <form action="" method="POST">
-        <div class="input-group">
-          <input type="text" class="form-control todo-input" name="todo-content" id="todo-content" placeholder="Create your todo item" required>
-          <span class="input-group-btn">
-            <button class="btn btn-dark" name="create_todo" type="submit">Add Todo</button>
-          </span>
-        </div>
-      </form>
+      <?php if(isset($_GET['edit'])) : 
+      $todo_edit_id = $_GET['edit'];
+      $query = "SELECT * FROM todos WHERE todo_id = {$todo_edit_id} ";
+      $select_todo_query = mysqli_query($connection, $query);
+      while($row = mysqli_fetch_assoc($select_todo_query)) {
+        $todo_content = $row['todo_content'];
+      } ?>
+        <form action="" method="POST">
+          <div class="input-group">
+            <input type="text" class="form-control todo-input" value="<?php echo $todo_content; ?>" name="todo-content_updated" id="todo-content" placeholder="Update your todo" required>
+            <span class="input-group-btn">
+              <button class="btn btn-dark" name="update_todo" type="submit">Update Todo</button>
+            </span>
+          </div>
+        </form>
+        <?php else : ?>
+          <form action="" method="POST">
+            <div class="input-group">
+              <input type="text" class="form-control todo-input" name="todo-content" id="todo-content" placeholder="Create your todo item" required>
+              <span class="input-group-btn">
+                <button class="btn btn-dark" name="create_todo" type="submit">Add Todo</button>
+              </span>
+            </div>
+          </form>
+      <?php endif; ?>
     </div>
   </div>
   <div class="row justify-content-center">
     <div class="col-10">
-      <ul class="todo-list_list">
-        <li class="todo-list_item">
-          <p class="todo-list_title">Post name pera pak</p>
-          <a class="todo-list_link edit" href="index.php?t=todo_id" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Todo"><i class="fa-solid fa-file-pen"></i></a>
-          <a class="todo-list_link delete" href="index.php?d=todo_id" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete Todo"><i class="fa-solid fa-xmark"></i></a>
-        </li>
-        <li class="todo-list_item">
-          <p class="todo-list_title">Post name pera pak</p>
-          <a class="todo-list_link edit" href="index.php?t=todo_id" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Todo"><i class="fa-solid fa-file-pen"></i></a>
-          <a class="todo-list_link delete" href="index.php?d=todo_id" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete Todo"><i class="fa-solid fa-xmark"></i></a>
-        </li>
-        <li class="todo-list_item">
-          <p class="todo-list_title">Post name pera pak</p>
-          <a class="todo-list_link edit" href="index.php?t=todo_id" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Todo"><i class="fa-solid fa-file-pen"></i></a>
-          <a class="todo-list_link delete" href="index.php?d=todo_id" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete Todo"><i class="fa-solid fa-xmark"></i></a>
-        </li>
-      </ul>
+      <?php
+      showTodoItems();
+      deleteTodo(); ?>
     </div>
   </div>
 </section>
