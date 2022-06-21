@@ -22,7 +22,7 @@ include "functions.php";?>
               <p class="card-text">Few users using our App</p>
             </div>
             <ul class="list-group list-group-flush">
-              <?php displayUserAndItemCount(); ?>
+              <?php displayFourUserAndItemCount(); ?>
             </ul>
             <div class="card-body">
               <a href="./all_users.php" class="card-link">All Users</a>

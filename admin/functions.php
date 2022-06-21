@@ -1,8 +1,17 @@
 <?php 
 
-function displayUserAndItemCount() {             
+function confirmQuery($result) {
+  global $connect;
+  if(!$result) {
+    die("QUERY FAILED" . mysqli_error($connect));
+  }
+}
+
+function displayFourUserAndItemCount() {             
   global $connection;
-  $query = "SELECT * FROM users  WHERE NOT user_role = 'admin' ";
+  $query = "SELECT * FROM users ";
+  $query .= "WHERE NOT user_role = 'admin' ";
+  $query .= "ORDER BY user_list_COUNT DESC LIMIT 4 ";
   $select_users = mysqli_query($connection, $query);
   while($row = mysqli_fetch_assoc($select_users)) {
     $user_id = $row['user_id'];
@@ -27,10 +36,22 @@ function showFourTodoItems() {
   }
 }
 
-
-
-
-
-
-
-?>
+function updateUsernameAndRole() {
+  global $connection;
+  if(isset($_GET['edit_user'])) {
+    $edit_id = $_GET['edit_user'];
+    if(isset($_POST['update_user'])) {
+      $updated_username = $_POST['update_username'];
+      $updated_username = stripslashes($updated_username);
+      $updated_username = mysqli_real_escape_string($connection, $updated_username);
+      $updated_role = $_POST['update_role'];
+  
+      $query = "UPDATE users SET ";
+      $query .= "user_name = '{$updated_username}', ";
+      $query .= "user_role = '{$updated_role}' ";
+      $query .= "WHERE user_id = {$edit_id} ";
+      $update_user_query = mysqli_query($connection, $query);
+      header("Location: all_users.php");
+    }
+  } 
+}

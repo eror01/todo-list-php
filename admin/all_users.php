@@ -1,7 +1,17 @@
 <?php
 include "includes/admin_header.php";
-include "includes/admin_nav.php"; ?>
+include "includes/admin_nav.php"; 
+include "functions.php";?>
+<?php updateUsernameAndRole(); 
 
+if(isset($_GET['delete_user'])) {
+  $delete_user = $_GET['delete_user'];
+  $query = "DELETE FROM users WHERE user_id = {$delete_user} ";
+  $delete_user_query = mysqli_query($connection, $query);
+  header("Location: all_users.php");
+}
+
+?>
 <section class="users">
   <div class="container">
     <div class="row">
@@ -33,9 +43,9 @@ include "includes/admin_nav.php"; ?>
                     <li class="list-group-item d-flex justify-content-between">User Role: <span><?php echo $user_role ?></span></li>
                     <li class="list-group-item d-flex justify-content-between">User Todo Item Count: <span class="badge bg-primary rounded-pill"><?php echo $user_todo_count; ?></span></li>
                     <li class="list-group-item d-flex justify-content-between">
-                      <a href="" class="btn btn-outline-dark">Edit User</a>
-                      <a href="" class="btn btn-outline-dark">User Todo's</a>
-                      <a href="" class="btn btn-outline-dark">Delete User</a>
+                      <a href="all_users?edit_user=<?php echo $user_id; ?>" class="btn btn-outline-dark">Edit User</a>
+                      <a href="all_todos?user_todo=<?php echo $user_id; ?>" class="btn btn-outline-dark">User Todo's</a>
+                      <a href="all_users?delete_user=<?php echo $user_id; ?>" class="btn btn-outline-dark">Delete User</a>
                     </li>
                   </ul>
                 </div>
@@ -44,13 +54,54 @@ include "includes/admin_nav.php"; ?>
           <?php } ?>
         </div>
       </div>
-      <div class="col-8">
-        <form action="" method="POST">
-          <div class="form-group">
-            <input type="text" name="" id="">
-            <input type="submit" value="Submit">
-          </div>
-        </form>
+      <div class="col-8 d-flex flex-column justify-content-center">
+        <?php
+        if (isset($_GET['edit_user'])) {
+          $edit_user_id = $_GET['edit_user'];
+          $query = "SELECT * FROM users WHERE user_id = {$edit_user_id} ";
+          $edit_user_query = mysqli_query($connection, $query);
+          while ($row = mysqli_fetch_assoc($edit_user_query)) {
+            $user_name = $row['user_name'];
+            $user_role = $row['user_role'];
+        ?>
+            <form action="" method="POST">
+              <div class="input-group mb-3">
+                <label class="input-group-text" for="update_user_role">Roles</label>
+                <select class="form-select" name="update_role" id="update_user_role">
+                  <option value="<?php echo $user_role; ?>"><?php echo ucfirst($user_role); ?></option>
+                  <option value="admin">Admin</option>
+                  <option value="contributor">Contributor</option>
+                  <option value="subscriber">Subscriber</option>
+                </select>
+              </div>
+              <div class="input-group">
+                <input class="form-control" type="text" value="<?php echo $user_name; ?>" name="update_username" id="update_username">
+                <span class="input-group-btn">
+                  <button class="btn btn-dark" name="update_user" type="submit">Update User</button>
+                </span>
+              </div>
+            </form>
+          <?php } ?>
+        <?php } ?>
+        <?php if (!isset($_GET['edit_user'])) : ?>
+          <form action="" method="POST">
+            <div class="input-group mb-3">
+              <label class="input-group-text" for="inputGroupSelect01">Roles</label>
+              <select class="form-select" id="inputGroupSelect01">
+                <option selected>All Roles</option>
+                <option value="admin">Admin</option>
+                <option value="contributor">Contributor</option>
+                <option value="subscriber">Subscriber</option>
+              </select>
+            </div>
+            <div class="input-group">
+              <input class="form-control" type="text" name="username" id="username">
+              <span class="input-group-btn">
+                <button class="btn btn-dark" name="edit_user" type="submit" disabled>Update User</button>
+              </span>
+            </div>
+          </form>
+        <?php endif; ?>
       </div>
     </div>
   </div>

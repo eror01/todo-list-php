@@ -22,7 +22,7 @@ function showTodoItems() {
   global $connection;
   if (isset($_SESSION['user_id'])) {
     $user_id = $_SESSION['user_id'];
-    $query = "SELECT * FROM todos WHERE todo_user_id = '{$user_id}' ";
+    $query = "SELECT * FROM todos WHERE todo_user_id = '{$user_id}' AND todo_is_completed = false ";
     $todo_user_query = mysqli_query($connection, $query);
     $count = mysqli_num_rows($todo_user_query);
     if ($count === 0) {
@@ -31,11 +31,13 @@ function showTodoItems() {
       while ($row = mysqli_fetch_assoc($todo_user_query)) {
         $todo_id = $row['todo_id'];
         $todo_content = $row['todo_content'];
+        $todo_content = ucfirst($todo_content);
         echo "<ul class='todo-list_list'>";
         echo "<li class='todo-list_item'>";
         echo "<p class='todo-list_title'>{$todo_content}</p>";
         echo "<a class='todo-list_link edit' href='index.php?edit={$todo_id}' data-bs-toggle='tooltip' data-bs-placement='top' title='Edit Todo'><i class='fa-solid fa-file-pen'></i></a>";
         echo "<a class='todo-list_link delete' href='index.php?delete={$todo_id}' data-bs-toggle='tooltip' data-bs-placement='top' title='Delete Todo'><i class='fa-solid fa-xmark'></i></a>";
+        echo "<a class='todo-list_link completed' href='index.php?is_completed={$todo_id}' data-bs-toggle='tooltip' data-bs-placement='top' title='Completed'><i class='fa-solid fa-check'></i></a>";
         echo "</li>";
         echo "</ul>";
       }
@@ -65,6 +67,55 @@ function deleteTodo() {
     $query = "DELETE FROM todos WHERE todo_id = {$todo_id} ";
     $delete_todo = mysqli_query($connection, $query);
     header("Location: index.php");
+  }
+}
+
+function updateTodoIsComplete() {
+  global $connection;
+  if(isset($_GET['is_completed'])) {
+    $is_completed = $_GET['is_completed'];
+    $query = "UPDATE todos SET ";
+    $query .= "todo_is_completed = 1 ";
+    $query .= "WHERE todo_id = {$is_completed} ";
+    $update_todo_is_complete = mysqli_query($connection, $query);
+    header("Location: index.php");
+  }
+}
+
+function undoTodoIsCompleted() {
+  global $connection;
+  if(isset($_GET['is_completed_undo'])) {
+    $is_completed_undo = $_GET['is_completed_undo'];
+    $query = "UPDATE todos SET ";
+    $query .= "todo_is_completed = false ";
+    $query .= "WHERE todo_id = {$is_completed_undo} ";
+    $undo_complete = mysqli_query($connection, $query);
+    header("Location: index.php");
+  }
+}
+
+function showTodoCompleted() {
+  global $connection;
+  if (isset($_SESSION['user_id'])) {
+    $user_id = $_SESSION['user_id'];
+    $query = "SELECT * FROM todos WHERE todo_user_id = '{$user_id}' AND todo_is_completed = true ";
+    $todo_completed = mysqli_query($connection, $query);
+    $count = mysqli_num_rows($todo_completed);
+    if ($count === 0) {
+      echo "<h2 class='text-center'>No completed todos</h2>";
+    } else {
+      while ($row = mysqli_fetch_assoc($todo_completed)) {
+        $todo_id = $row['todo_id'];
+        $todo_content = $row['todo_content'];
+        $todo_content = ucfirst($todo_content);
+        echo "<ul class='todo-list_list'>";
+        echo "<li class='todo-list_item' style='background-color: #DCDCDC;'>";
+        echo "<p class='todo-list_title text-decoration-line-through'>{$todo_content}</p>";
+        echo "<a class='todo-list_link undo' href='index.php?is_completed_undo={$todo_id}' data-bs-toggle='tooltip' data-bs-placement='top' title='Undo'><i class='fa-solid fa-rotate-left'></i></a>";
+        echo "</li>";
+        echo "</ul>";
+      }
+    }
   }
 }
 

@@ -66,7 +66,7 @@
 .todo-list_link.edit {
   width: 40px;
   height: 100%;
-  right: 40px;
+  right: 80px;
   border-right: 1px solid gray;
   border-left: 1px solid gray;
   color: black;
@@ -76,6 +76,25 @@
   height: 100%;
   right: 0;
   color: red;
+}
+.todo-list_link.completed {
+  height: 100%;
+  width: 40px;
+  right: 40px;
+  color:#2e8b57;
+  border-right: 1px solid gray;
+}
+.todo-list_link.undo {
+  height: 100%;
+  width: 40px;
+  right: 0;
+  color: black;
+  background-color: white;
+  border-left: 1px solid gray;
+  transition: background-color .5s ease-in;
+}
+.todo-list_link.undo:hover {
+  background-color: #DCDCDC;
 }
 .todo-list_user {
   text-align: center;
