@@ -21,6 +21,13 @@ createUser(); ?>
             <input type="email" id="email" class="form-control" name="email" placeholder="Email" required>
             <div class="invalid-feedback">Email is required!</div>
           </div>
+          <div class="form-group mt-3">
+            <select class="form-select" name="user_role" aria-label="Default select example">
+              <option value="subscriber" selected>Open this select menu</option>
+              <option value="contributor">Contributor</option>
+              <option value="subscriber">Subscriber</option>
+            </select>
+          </div>
           <div class="form-group mt-2">
             <label for="password" class="mb-1 ">Password</label>
             <input type="password" id="password" class="form-control password" required placeholder="Enter your pasword" name="password">

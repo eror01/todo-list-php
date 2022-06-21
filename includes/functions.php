@@ -75,6 +75,7 @@ function createUser() {
     $user_email = $_POST['email'];
     $user_password = $_POST["password"];
     $user_cpassword = $_POST["confirm_password"];
+    $user_role = $_POST['user_role'];
     
     if (!preg_match("/^[a-zA-z]*$/", $user_name)) {
       $error = '<div class="alert alert-danger" role="alert">
@@ -103,10 +104,41 @@ function createUser() {
       $user_password = stripslashes($user_password);
       $user_password = mysqli_real_escape_string($connection, $user_password);
       
-      $query = "INSERT INTO users(user_name, user_password, user_email) ";
-      $query .= "VALUES('{$user_name}', '{$user_password}', '{$user_email}' ) ";
+      $query = "INSERT INTO users(user_name, user_password, user_email, user_role) ";
+      $query .= "VALUES('{$user_name}', '{$user_password}', '{$user_email}', '{$user_role}' ) ";
       $create_user = mysqli_query($connection, $query);
       header("Location: login.php");
+    }
+  }
+}
+
+function userLogin() {
+  global $connection;
+  if(isset($_POST['login'])) {
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+
+    $query = "SELECT * FROM users WHERE user_name = '{$username}' ";
+    $user_query = mysqli_query($connection, $query);
+    while($row = mysqli_fetch_assoc($user_query)) {
+      $db_id = $row['user_id'];
+      $db_username = $row['user_name'];
+      $db_password = $row['user_password'];
+      $db_user_role = $row['user_role'];
+    }
+    
+    if($username === $db_username && $password === $db_password) {
+      $_SESSION['username'] = $db_username;
+      $_SESSION['password'] = $db_password;
+      $_SESSION['user_id'] = $db_id;
+      $_SESSION['loggedIn'] = true;
+      $_SESSION['userRole'] = $db_user_role;
+      header("Location: index.php");
+    } else {
+      $error = '<div class="alert alert-danger" role="alert">
+      Your credentials are wrong!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>';
+      echo $error;
     }
   }
 }

@@ -3,6 +3,7 @@ if(!isset($_SESSION['loggedIn'])) {
   $loggedIn = false;
 } else {
   $loggedIn = $_SESSION['loggedIn'];
+  $admin = $_SESSION['userRole'] === 'admin';
 }
 ?>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -17,6 +18,11 @@ if(!isset($_SESSION['loggedIn'])) {
           <li class="nav-item">
             <a class="nav-link" href="./logout.php">Logout</a>
           </li>
+          <?php if($admin) : ?>
+            <li class="nav-item">
+              <a class="nav-link" href="admin/index.php">Admin Dashboard</a>
+            </li>
+          <?php endif; ?>
         <?php else : ?>
           <li class="nav-item">
             <a class="nav-link" href="./login.php">Log In</a>

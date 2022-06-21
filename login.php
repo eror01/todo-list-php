@@ -1,31 +1,7 @@
 <?php 
-include "./includes/header.php"; ?>
-<?php 
-
-if(isset($_POST['login'])) {
-  $username = $_POST['username'];
-  $password = $_POST['password'];
-
-  $query = "SELECT * FROM users WHERE user_name = '{$username}' ";
-  $user_query = mysqli_query($connection, $query);
-  while($row = mysqli_fetch_assoc($user_query)) {
-    $db_id = $row['user_id'];
-    $db_username = $row['user_name'];
-    $db_password = $row['user_password'];
-  }
-
-  if($username === $db_username && $password === $db_password) {
-    $_SESSION['username'] = $db_username;
-    $_SESSION['password'] = $db_password;
-    $_SESSION['user_id'] = $db_id;
-    $_SESSION['loggedIn'] = true;
-    header("Location: index.php");
-  } else {
-    echo "nothing";
-  }
-}
-
-?>
+include "./includes/header.php"; 
+include "./includes/functions.php"; ?>
+<?php userLogin(); ?>
 <div class="wrapper bg-light">
   <div class="container">
     <div class="row d-flex justify-content-center">

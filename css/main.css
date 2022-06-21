@@ -92,3 +92,19 @@
   top: 50%;
   right: 0;
 }
+
+.admin-wrapper-padding {
+  padding: 150px 0;
+}
+
+.admin-title {
+  margin-bottom: 60px;
+  text-align: center;
+}
+
+.users {
+  min-height: 90vh;
+  display: flex;
+  align-items: flex-start;
+  padding-top: 200px;
+}
