@@ -58,7 +58,7 @@ $user_list_update = mysqli_query($connection, $query); ?>
       updateTodoIsComplete(); ?>
     </div>
   </div>
-  <div class="row justify-content-center">
+  <div class="row justify-content-center py-4">
     <div class="col-12">
       <h1 class="todo-list_user">Completed Todos</h1>
     </div>

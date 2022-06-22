@@ -8,11 +8,12 @@ function createTodoItem() {
     $user_id = $_SESSION['user_id'];
     if (isset($_POST['create_todo'])) {
       $todo_content = $_POST['todo-content'];
+      $todo_author = $username;
       $todo_content = stripslashes($todo_content);
       $todo_content = mysqli_real_escape_string($connection, $todo_content);
   
-      $query = "INSERT INTO todos(todo_content, todo_user_id) ";
-      $query .= "VALUES('{$todo_content}', $user_id) ";
+      $query = "INSERT INTO todos(todo_content, todo_user_id, todo_author) ";
+      $query .= "VALUES('{$todo_content}', $user_id, '{$todo_author}') ";
       $create_todo_query = mysqli_query($connection, $query);
     }
   }
@@ -27,6 +28,7 @@ function showTodoItems() {
     $count = mysqli_num_rows($todo_user_query);
     if ($count === 0) {
       echo "<h2 class='text-center'>No todo items!</h2>";
+      echo "<hr>";
     } else {
       while ($row = mysqli_fetch_assoc($todo_user_query)) {
         $todo_id = $row['todo_id'];

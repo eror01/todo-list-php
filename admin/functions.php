@@ -1,9 +1,9 @@
 <?php 
 
 function confirmQuery($result) {
-  global $connect;
+  global $connection;
   if(!$result) {
-    die("QUERY FAILED" . mysqli_error($connect));
+    die("QUERY FAILED" . mysqli_error($connection));
   }
 }
 
