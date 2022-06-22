@@ -13,4 +13,10 @@
     <li>All Users page shows users and their information, admin can also edit their username and role</li>
     <li>All Todos shows todos but with pagination</li>
    </ul>
+   <h2>App Technologies</h2>
+   <ul>
+      <li>PHP</li>
+      <li>Small Changes with CSS</li>
+      <li>CSS Framework Bootstrap</li>
+   </ul>
 </div>
