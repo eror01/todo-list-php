@@ -13,7 +13,9 @@ include "functions.php"; ?>
         <?php
         $per_page = 5;
         if (isset($_GET['page'])) {
-          $page = $_GET['page'];
+          if(is_numeric($_GET['page'])) {
+            $page = $_GET['page'];
+          }
         } else {
           $page = "";
         }
@@ -22,7 +24,6 @@ include "functions.php"; ?>
         } else {
           $page_1 = ($page * $per_page) - $per_page;
         }
-
         $select_todos_query = "SELECT * FROM todos";
         $count_todos_query = mysqli_query($connection, $select_todos_query);
         $count = mysqli_num_rows($count_todos_query);

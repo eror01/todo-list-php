@@ -25,7 +25,7 @@ $user_list_update = mysqli_query($connection, $query); ?>
     <div class="col-10">
       <?php if (isset($_GET['edit'])) :
         $todo_edit_id = $_GET['edit'];
-        $query = "SELECT * FROM todos WHERE todo_id = {$todo_edit_id} ";
+        $query = "SELECT * FROM todos WHERE todo_id = {$todo_edit_id} AND todo_user_id = {$_SESSION['user_id']} ";
         $select_todo_query = mysqli_query($connection, $query);
         while ($row = mysqli_fetch_assoc($select_todo_query)) {
           $todo_content = $row['todo_content'];

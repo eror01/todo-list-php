@@ -40,18 +40,21 @@ function updateUsernameAndRole() {
   global $connection;
   if(isset($_GET['edit_user'])) {
     $edit_id = $_GET['edit_user'];
-    if(isset($_POST['update_user'])) {
-      $updated_username = $_POST['update_username'];
-      $updated_username = stripslashes($updated_username);
-      $updated_username = mysqli_real_escape_string($connection, $updated_username);
-      $updated_role = $_POST['update_role'];
-  
-      $query = "UPDATE users SET ";
-      $query .= "user_name = '{$updated_username}', ";
-      $query .= "user_role = '{$updated_role}' ";
-      $query .= "WHERE user_id = {$edit_id} ";
-      $update_user_query = mysqli_query($connection, $query);
-      header("Location: all_users.php");
+    $edit_id = mysqli_real_escape_string($connection, $edit_id);
+    if(is_numeric(($edit_id))) {
+      if(isset($_POST['update_user'])) {
+        $updated_username = $_POST['update_username'];
+        $updated_username = stripslashes($updated_username);
+        $updated_username = mysqli_real_escape_string($connection, $updated_username);
+        $updated_role = $_POST['update_role'];
+    
+        $query = "UPDATE users SET ";
+        $query .= "user_name = '{$updated_username}', ";
+        $query .= "user_role = '{$updated_role}' ";
+        $query .= "WHERE user_id = {$edit_id} ";
+        $update_user_query = mysqli_query($connection, $query);
+        header("Location: all_users.php");
+      }
     }
   } 
 }
