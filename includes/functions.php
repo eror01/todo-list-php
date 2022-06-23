@@ -51,13 +51,16 @@ function updateTodo() {
   global $connection;
   if(isset($_GET['edit'])) {
     $edit_id = $_GET['edit'];
-    if(isset($_POST['update_todo'])) {
-      $todo_content_updated = $_POST['todo-content_updated'];
-      $query = "UPDATE todos SET ";
-      $query .= "todo_content = '{$todo_content_updated}' ";
-      $query .= "WHERE todo_id = {$edit_id} ";
-      $update_todo = mysqli_query($connection, $query);
-      header("Location: index.php");
+    $edit_id = mysqli_real_escape_string($connection, $edit_id);
+    if(is_numeric($edit_id)) {
+      if(isset($_POST['update_todo'])) {
+        $todo_content_updated = $_POST['todo-content_updated'];
+        $query = "UPDATE todos SET ";
+        $query .= "todo_content = '{$todo_content_updated}' ";
+        $query .= "WHERE todo_id = {$edit_id} AND todo_user_id = {$_SESSION['user_id']} ";
+        $update_todo = mysqli_query($connection, $query);
+        header("Location: index.php");
+      }
     }
   }
 }
@@ -66,9 +69,12 @@ function deleteTodo() {
   global $connection;
   if(isset($_GET['delete'])) { 
     $todo_id = $_GET['delete'];
-    $query = "DELETE FROM todos WHERE todo_id = {$todo_id} ";
-    $delete_todo = mysqli_query($connection, $query);
-    header("Location: index.php");
+    $todo_id = mysqli_real_escape_string($connection, $todo_id);
+    if(is_numeric($todo_id)) {
+      $query = "DELETE FROM todos WHERE todo_id = {$todo_id} AND todo_user_id = {$_SESSION['user_id']} ";
+      $delete_todo = mysqli_query($connection, $query);
+      header("Location: index.php");
+    }
   }
 }
 
@@ -76,11 +82,14 @@ function updateTodoIsComplete() {
   global $connection;
   if(isset($_GET['is_completed'])) {
     $is_completed = $_GET['is_completed'];
-    $query = "UPDATE todos SET ";
-    $query .= "todo_is_completed = 1 ";
-    $query .= "WHERE todo_id = {$is_completed} ";
-    $update_todo_is_complete = mysqli_query($connection, $query);
-    header("Location: index.php");
+    $is_completed = mysqli_real_escape_string($connection, $is_completed);
+    if(is_numeric($is_completed)) {
+      $query = "UPDATE todos SET ";
+      $query .= "todo_is_completed = 1 ";
+      $query .= "WHERE todo_id = {$is_completed} AND todo_user_id = {$_SESSION['user_id']} ";
+      $update_todo_is_complete = mysqli_query($connection, $query);
+      header("Location: index.php");
+    }
   }
 }
 
@@ -88,11 +97,14 @@ function undoTodoIsCompleted() {
   global $connection;
   if(isset($_GET['is_completed_undo'])) {
     $is_completed_undo = $_GET['is_completed_undo'];
-    $query = "UPDATE todos SET ";
-    $query .= "todo_is_completed = false ";
-    $query .= "WHERE todo_id = {$is_completed_undo} ";
-    $undo_complete = mysqli_query($connection, $query);
-    header("Location: index.php");
+    $is_completed_undo = mysqli_real_escape_string($connection, $is_completed_undo);
+    if(is_numeric($is_completed_undo)) {
+      $query = "UPDATE todos SET ";
+      $query .= "todo_is_completed = false ";
+      $query .= "WHERE todo_id = {$is_completed_undo} AND todo_user_id = {$_SESSION['user_id']} ";
+      $undo_complete = mysqli_query($connection, $query);
+      header("Location: index.php");
+    }
   }
 }
 
@@ -170,6 +182,10 @@ function userLogin() {
   if(isset($_POST['login'])) {
     $username = $_POST['username'];
     $password = $_POST['password'];
+    $username = stripslashes($username);
+    $username = mysqli_real_escape_string($connection, $username);
+    $password = stripslashes($password);
+    $password = mysqli_real_escape_string($connection, $password);
 
     $query = "SELECT * FROM users WHERE user_name = '{$username}' ";
     $user_query = mysqli_query($connection, $query);

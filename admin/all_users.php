@@ -6,9 +6,12 @@ include "functions.php";?>
 
 if(isset($_GET['delete_user'])) {
   $delete_user = $_GET['delete_user'];
-  $query = "DELETE FROM users WHERE user_id = {$delete_user} ";
-  $delete_user_query = mysqli_query($connection, $query);
-  header("Location: all_users.php");
+  $delete_user = mysqli_real_escape_string($connection, $delete_user);
+  if(is_numeric($delete_user)) {
+    $query = "DELETE FROM users WHERE user_id = {$delete_user} ";
+    $delete_user_query = mysqli_query($connection, $query);
+    header("Location: all_users.php");
+  }
 }
 
 ?>
@@ -58,11 +61,14 @@ if(isset($_GET['delete_user'])) {
         <?php
         if (isset($_GET['edit_user'])) {
           $edit_user_id = $_GET['edit_user'];
-          $query = "SELECT * FROM users WHERE user_id = {$edit_user_id} ";
-          $edit_user_query = mysqli_query($connection, $query);
-          while ($row = mysqli_fetch_assoc($edit_user_query)) {
-            $user_name = $row['user_name'];
-            $user_role = $row['user_role'];
+          $edit_user_id = mysqli_real_escape_string($connection, $edit_user_id);
+          if(is_numeric($edit_user_id)) {
+            $query = "SELECT * FROM users WHERE user_id = {$edit_user_id} ";
+            $edit_user_query = mysqli_query($connection, $query);
+            while ($row = mysqli_fetch_assoc($edit_user_query)) {
+              $user_name = $row['user_name'];
+              $user_role = $row['user_role'];
+          }
         ?>
             <form action="" method="POST">
               <div class="input-group mb-3">
